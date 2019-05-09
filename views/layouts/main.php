@@ -65,13 +65,19 @@ AppAsset::register($this);
                 'url' => ['/order'],
                 'visible' => Yii::$app->user->can('admin')
             ],
+            [
+                'label' => 'Manage User',
+                'url' => ['/user/admin'],
+                'visible' => Yii::$app->user->can('admin')
+            ],
+
 
             [
                 'label' => 'My Account',
                 'items' => [
-                    ['label' => 'Account', 'url' => '/user/account'],
+                    ['label' => 'Account', 'url' => ['/user/account']],
                     '<li class="divider"></li>',
-                    ['label' => 'Profile', 'url' => '/user/profile'],
+                    ['label' => 'Profile', 'url' => ['/user/profile']],
                 ],
                 'visible' => !Yii::$app->user->isGuest
             ],

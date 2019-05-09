@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'guest_id',
                 'label' => 'Guest Name',
                 'value' => function ($model) {
-                    return $model->guest->name;
+                    return ($model->guest->name?$model->guest->name:'');
                 }
             ],
             [
