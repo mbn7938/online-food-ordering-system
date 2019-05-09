@@ -84,7 +84,7 @@ class OrderController extends Controller
             $post = Yii::$app->request->post();
 
 
-            if ($post['email']) {
+            if (isset($post['email'])) {
                 $guest = new Guest();
                 $guest->email = $post['email'];
                 $guest->tel_no = $post['tel_no'];
