@@ -218,12 +218,10 @@ class OrderController extends Controller
 
             $total_amount = $post['total_amount'];
 
-            $paid_amount = $post['paid_amount'];
-
             $model = new Payment();
 
             $model->total_amount = $total_amount;
-            $model->paid_amount = $paid_amount;
+            $model->paid_amount = $total_amount;
             $model->paid_at = date('Y-m-d H:i:s');
             $model->order_id = $order_id;
             $model->total_amount = $total_amount;
