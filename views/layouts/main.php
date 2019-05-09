@@ -1,6 +1,7 @@
 <?php
 
 /* @var $this \yii\web\View */
+
 /* @var $content string */
 
 use app\widgets\Alert;
@@ -37,27 +38,58 @@ AppAsset::register($this);
         ],
     ]);
 
+
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
+            [
+                'label' => 'Home',
+                'url' => ['site/index'],
+                'linkOptions' => [],
+            ],
             ['label' => 'Menu', 'url' => ['/menu-food/index']],
             ['label' => 'Order', 'url' => ['/order/create']],
 
+            [
+                'label' => 'Manage Food',
+                'url' => ['/food'],
+                'visible' => Yii::$app->user->can('admin')
+            ],
+            [
+                'label' => 'Manage Menu',
+                'url' => ['/menu'],
+                'visible' => Yii::$app->user->can('admin')
+            ],
+            [
+                'label' => 'Manage Order',
+                'url' => ['/order'],
+                'visible' => Yii::$app->user->can('admin')
+            ],
 
+            [
+                'label' => 'My Account',
+                'items' => [
+                    ['label' => 'Account', 'url' => '/user/account'],
+                    '<li class="divider"></li>',
+                    ['label' => 'Profile', 'url' => '/user/profile'],
+                ],
+                'visible' => !Yii::$app->user->isGuest
+            ],
             Yii::$app->user->isGuest ? (
-             ['label' => 'Login', 'url' => ['/user/login']]
+            ['label' => 'Login', 'url' => ['/user/login']]
             ) :
                 (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
+                    '<li>'
+                    . Html::beginForm(['/site/logout'], 'post')
+                    . Html::submitButton(
+                        'Logout (' . Yii::$app->user->identity->username . ')',
+                        ['class' => 'btn btn-link logout']
+                    )
+                    . Html::endForm()
+                    . '</li>'
                 )
-                . Html::endForm()
-                . '</li>'
-            )
         ],
+
     ]);
     NavBar::end();
     ?>

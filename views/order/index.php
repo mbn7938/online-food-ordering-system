@@ -26,15 +26,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-
-            [
-                'attribute' => 'menu_food_id',
-                'label' => 'Menu and Food',
-                'value' => function ($model) {
-                    return $model->menuFood->menu->name .' - '.$model->menuFood->food->name;
-                }
-            ],
             [
                 'attribute' => 'guest_id',
                 'label' => 'Guest Name',

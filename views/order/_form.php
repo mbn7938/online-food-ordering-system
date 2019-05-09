@@ -13,23 +13,30 @@ use yii\widgets\Pjax;
 
 <div class="order-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php if (Yii::$app->session->hasFlash('success')): ?>
+            <?= Yii::$app->session->getFlash('success') ?>
+
+    <?php endif; ?>
+
+    <?php $form = ActiveForm::begin(['id' => 'order-form']); ?>
 
 
-    <?= $form->field($guest, 'name')->textInput() ?>
+    <?= $form->field($guest, 'email')->textInput() ?>
+
+    <?= $form->field($guest, 'tel_no')->textInput() ?>
 
 
     <?=
     $form->field($model, 'type')
         ->dropDownList(
-           ['','take away','eat here']
+            ['', 'take away', 'eat here']
         )
     ?>
 
     <?=
     $form->field($model, 'table_no')->dropDownList(
-            [1,2,3,4,5,6,7,8,9,10]
-        )
+        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    )
     ?>
 
 
@@ -37,6 +44,7 @@ use yii\widgets\Pjax;
 
     <?php Pjax::begin(); ?>
     <?= GridView::widget([
+        'id' => 'order-menu-gridview',
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [

@@ -11,6 +11,7 @@ use app\models\Order;
  */
 class OrderSearch extends Order
 {
+    public $menu_food_id;
     /**
      * {@inheritdoc}
      */

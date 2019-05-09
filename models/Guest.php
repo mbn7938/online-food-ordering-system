@@ -10,6 +10,7 @@ use Yii;
  * @property int $id
  * @property string $name
  * @property int $tel_no
+ * @property string $email
  *
  * @property Order[] $orders
  */
@@ -29,8 +30,10 @@ class Guest extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['email','tel_no'], 'required'],
             [['tel_no'], 'integer'],
             [['name'], 'string', 'max' => 255],
+            [['email'], 'string', 'max' => 100],
         ];
     }
 
@@ -42,7 +45,8 @@ class Guest extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'tel_no' => 'Tel No',
+            'tel_no' => 'Mobile Number',
+            'email' => 'Guest Email',
         ];
     }
 

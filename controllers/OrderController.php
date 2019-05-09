@@ -59,8 +59,10 @@ class OrderController extends Controller
      */
     public function actionView($id)
     {
+        $orderDetails = OrderDetails::find()->where(['order_id'=>$id])->one();
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'orderDetails' => $orderDetails,
         ]);
     }
 
@@ -221,6 +223,8 @@ class OrderController extends Controller
             $model->total_amount = $total_amount;
 
             $model->save();
+
+            Yii::$app->session->setFlash('success', "Your Order Payment Succesfull.");
 
             return $this->redirect(['create']);
 

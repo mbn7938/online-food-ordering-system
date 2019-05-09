@@ -3,6 +3,7 @@
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
 use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
@@ -47,8 +48,22 @@ $this->params['breadcrumbs'][] = $this->title;
                     return 'MYR ' . $model->food->price;
                 }
             ],
+            ['class' => 'yii\grid\ActionColumn',
+                'contentOptions' => ['style' => 'width: 8.7%'],
+                'visible'=> Yii::$app->user->can('admin') ? true : false,
+                'buttons'=>[
+                    'view'=>function ($url, $model) {
 
-            ['class' => 'yii\grid\ActionColumn'],
+                        return '<a href='.Url::to(["menu-food/view","id"=> $model->id]).'><span class="glyphicon glyphicon-eye-open"></span></a>';
+                    },
+                    'update'=>function ($url, $model) {
+
+                        return '<a href='.Url::to(["menu-food/update","id"=> $model->id]).'><span class="glyphicon glyphicon-pencil"></span></a>';
+                    },
+                ],
+            ],
+
+
         ],
     ]); ?>
 
