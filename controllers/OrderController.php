@@ -80,12 +80,18 @@ class OrderController extends Controller
 
 
         if (Yii::$app->request->isAjax) {
+
             $post = Yii::$app->request->post();
 
-            if ($post['name']) {
+
+            if ($post['email']) {
                 $guest = new Guest();
-                $guest->name = $post['name'];
-                $guest->save();
+                $guest->email = $post['email'];
+                $guest->tel_no = $post['tel_no'];
+                if(!$guest->save())
+                {
+                    $guest->getErrors();
+                }
 
             }
             $order = new Order();

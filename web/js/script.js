@@ -29,7 +29,9 @@ $(document).ready(function () {
 
         var form = $(this);
 
-        var name = $('#guest-name').val()
+        var email = $('#guest-email').val()
+
+        var tel_no = $('#guest-tel_no').val()
 
 
         var tableno = $('#order-table_no').val()
@@ -55,7 +57,8 @@ $(document).ready(function () {
 
             data: {
                 'checkedRowId': checkedRowId,
-                'name': name,
+                'email': email,
+                'tel_no': tel_no,
                 'tableno': tableno,
                 'type': type
             },
