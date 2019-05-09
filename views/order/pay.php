@@ -36,7 +36,7 @@
                                                 <div class="col-md-9">
                                                     <table class="table table-striped">
                                                         <tr>
-                                                            <td colspan="2">Guest Name : <?= $order->guest->name ?></td>
+                                                            <td colspan="2">Guest Name : <?= (isset($order->guest->name)?$order->guest->name:$order->guest->email) ?></td>
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2">Order Type
