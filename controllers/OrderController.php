@@ -6,6 +6,7 @@ use app\models\Guest;
 use app\models\MenuFoodSearch;
 use app\models\OrderDetails;
 use app\models\Payment;
+use app\modules\user\models\User;
 use Yii;
 use app\models\Order;
 use app\models\OrderSearch;
@@ -52,6 +53,24 @@ class OrderController extends Controller
     }
 
     /**
+     * Lists all Order models.
+     * @return mixed
+     */
+    public function actionMyOrder()
+    {
+        $user = Yii::$app->user->identity;
+
+        $searchModel = new OrderSearch();
+        $dataProvider = $searchModel->searchOwn(Yii::$app->request->queryParams, $user);
+
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
      * Displays a single Order model.
      * @param integer $id
      * @return mixed
@@ -59,7 +78,7 @@ class OrderController extends Controller
      */
     public function actionView($id)
     {
-        $orderDetails = OrderDetails::find()->where(['order_id'=>$id])->one();
+        $orderDetails = OrderDetails::find()->where(['order_id' => $id])->one();
 
         return $this->render('view', [
             'orderDetails' => $orderDetails,
@@ -75,8 +94,14 @@ class OrderController extends Controller
     {
         $model = new Order();
 
-
         $guest = new Guest();
+
+
+        if (!Yii::$app->user->isGuest) {
+            $user = Yii::$app->user->identity;
+
+            $guest = Guest::find()->where(['email' => $user->email])->one();
+        }
 
 
         if (Yii::$app->request->isAjax) {
@@ -85,18 +110,33 @@ class OrderController extends Controller
 
 
             if (isset($post['email'])) {
-                $guest = new Guest();
-                $guest->email = $post['email'];
-                $guest->tel_no = $post['tel_no'];
-                if(!$guest->save())
-                {
-                    $guest->getErrors();
+
+                $newGuest = new Guest();
+                $newGuest->email = $post['email'];
+                $newGuest->tel_no = $post['tel_no'];
+
+                $newGuest->save();
+                $user = User::find()->where(['email' => $post['email']])->one();
+
+                if (!$user) {
+
+                    $newUser = new User();
+                    $newUser->role_id = 2;
+                    $newUser->email = $post['email'];
+                    //$newUser->username = $post['email'];
+                    $newUser->status = 1;
+                    $newUser->password = Yii::$app->security->generatePasswordHash('user12345');
+
+                    if (!$newUser->save()) {
+                        var_dump($newUser->getErrors());
+                    }
                 }
+                $guest->getErrors();
 
             }
             $order = new Order();
 
-            $order->guest_id = $guest->id;
+            $order->guest_id = (isset($newGuest)?$newGuest:$guest->id);
             $order->type = $post['type'];
             $order->table_no = (isset($post['tableno']) ? $post['tableno'] : null);
             $order->order_at = date('Y-m-d H:i:s');
@@ -193,11 +233,11 @@ class OrderController extends Controller
     {
         $order = Order::findOne($order_id);
 
-        $orderFood = OrderDetails::find()->where(['order_id'=>$order_id])->all();
+        $orderFood = OrderDetails::find()->where(['order_id' => $order_id])->all();
 
         return $this->render('pay', [
             'orderFood' => $orderFood,
-            'order'=> $order
+            'order' => $order
         ]);
     }
 
@@ -213,8 +253,7 @@ class OrderController extends Controller
 
         $order_id = $post['order_id'];
 
-        if ($post)
-        {
+        if ($post) {
 
             $total_amount = $post['total_amount'];
 
@@ -234,6 +273,6 @@ class OrderController extends Controller
 
         }
 
-        return $this->redirect(['pay','order_id'=>$order_id]);
+        return $this->redirect(['pay', 'order_id' => $order_id]);
     }
 }

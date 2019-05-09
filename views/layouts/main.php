@@ -49,6 +49,11 @@ AppAsset::register($this);
             ],
             ['label' => 'Menu', 'url' => ['/menu-food/index']],
             ['label' => 'Order', 'url' => ['/order/create']],
+            [
+                'label' => 'My Order',
+                'url' => ['/order/my-order'],
+                'visible' => !Yii::$app->user->isGuest
+            ],
 
             [
                 'label' => 'Manage Food',
@@ -63,6 +68,11 @@ AppAsset::register($this);
             [
                 'label' => 'Manage Order',
                 'url' => ['/order'],
+                'visible' => Yii::$app->user->can('admin')
+            ],
+            [
+                'label' => 'Assign Food To Menu',
+                'url' => ['/menu-food/create'],
                 'visible' => Yii::$app->user->can('admin')
             ],
             [
