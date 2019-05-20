@@ -131,12 +131,13 @@ class OrderController extends Controller
                         var_dump($newUser->getErrors());
                     }
                 }
-                $guest->getErrors();
+
 
             }
+
             $order = new Order();
 
-            $order->guest_id = (isset($newGuest)?$newGuest:$guest->id);
+            $order->guest_id = (isset($newGuest)?$newGuest->id:$guest->id);
             $order->type = $post['type'];
             $order->table_no = (isset($post['tableno']) ? $post['tableno'] : null);
             $order->order_at = date('Y-m-d H:i:s');
@@ -151,9 +152,22 @@ class OrderController extends Controller
                     $orderDetails->status = 1;
                     $orderDetails->save();
                 }
+
+                \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+
+                $ref = \yii\helpers\Url::to((['/order/pay', 'order_id' => $order->id]));
+                return $ref;
             }
-            $ref = \yii\helpers\Url::to((['/order/pay', 'order_id' => $order->id]));
-            return $ref;
+            else
+            {
+                \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+
+                $ref = \yii\helpers\Url::to((['/order/create']));
+                return $ref;
+            }
+
         }
 
 
