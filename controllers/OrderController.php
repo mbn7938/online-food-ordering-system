@@ -139,6 +139,7 @@ class OrderController extends Controller
 
             $order->guest_id = (isset($newGuest)?$newGuest->id:$guest->id);
             $order->type = $post['type'];
+            $order->status = Order::ORDERED;
             $order->table_no = (isset($post['tableno']) ? $post['tableno'] : null);
             $order->order_at = date('Y-m-d H:i:s');
 
@@ -206,6 +207,24 @@ class OrderController extends Controller
             'model' => $model,
         ]);
     }
+    /**
+     * Updates an existing Order model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionUpdateStatus($id,$status = null)
+    {
+        $model = $this->findModel($id);
+
+        $model->status = $status;
+
+        $model->save();
+
+        return $this->redirect(['index']);
+    }
+
 
     /**
      * Deletes an existing Order model.
