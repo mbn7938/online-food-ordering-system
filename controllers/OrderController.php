@@ -98,9 +98,15 @@ class OrderController extends Controller
 
 
         if (!Yii::$app->user->isGuest) {
+
             $user = Yii::$app->user->identity;
 
             $guest = Guest::find()->where(['email' => $user->email])->one();
+
+            if(!$guest)
+            {
+                $guest = new Guest();
+            }
         }
 
 
@@ -108,29 +114,49 @@ class OrderController extends Controller
 
             $post = Yii::$app->request->post();
 
-
             if (isset($post['email'])) {
 
-                $newGuest = new Guest();
-                $newGuest->email = $post['email'];
-                $newGuest->tel_no = $post['tel_no'];
+                if (!Yii::$app->user->isGuest) {
 
-                $newGuest->save();
-                $user = User::find()->where(['email' => $post['email']])->one();
+                    $guest = Guest::find()->where(['email' => $user->email])->one();
 
-                if (!$user) {
+                    if(!$guest)
+                    {
+                        $newGuest = new Guest();
+                        $newGuest->email = $post['email'];
+                        $newGuest->tel_no = $post['tel_no'];
 
-                    $newUser = new User();
-                    $newUser->role_id = 2;
-                    $newUser->email = $post['email'];
-                    //$newUser->username = $post['email'];
-                    $newUser->status = 1;
-                    $newUser->password = Yii::$app->security->generatePasswordHash('user12345');
+                        $newGuest->save();
+                    }
 
-                    if (!$newUser->save()) {
-                        var_dump($newUser->getErrors());
+                }
+                else
+                {
+                    $newGuest = new Guest();
+                    $newGuest->email = $post['email'];
+                    $newGuest->tel_no = $post['tel_no'];
+
+                    $newGuest->save();
+                    $user = User::find()->where(['email' => $post['email']])->one();
+
+                    if (!$user) {
+
+                        $password = 'neo';
+
+                        $newUser = new User();
+                        $newUser->role_id = 2;
+                        $newUser->email = $post['email'];
+                        //$newUser->username = $post['email'];
+                        $newUser->status = 1;
+                        $newUser->password = $password;
+
+                        if (!$newUser->save()) {
+                            var_dump($newUser->getErrors());
+                        }
                     }
                 }
+
+
 
 
             }
