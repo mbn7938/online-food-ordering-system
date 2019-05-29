@@ -44,36 +44,67 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'status',
                 'label' => 'Order Status',
-                'format' => 'html',
+                'format' => 'raw',
                 'value' => function ($model) {
 
                     if ($model->status == 1) {
-                        return '<span class="badge badge-primary">PENDING</span>';
-                    }
-                    elseif($model->status == 2)
-                    {
+                        return '<span class="badge badge-info">PENDING</span>';
+                    } elseif ($model->status == 2) {
                         return '<span class="badge badge-primary">COOKING</span>';
-                    }
-                    else
-                    {
+                    } else {
                         return '<span class="badge badge-primary">REJECTED</span>';
                     }
 
                 }
             ],
-            'table_no',
+            [
+                'attribute' => 'table_no',
+                'label' => 'Order Table No.',
+                'format' => 'raw',
+                'value' => function ($model) {
+
+                    if ($model->table_no == 1) {
+                        return '<span class="badge badge-info">'.$model->table_no.'</span>';
+                    }
+                    else
+                    {
+                        return '<span class="badge badge-info">TAKE <AWAY></AWAY></span>';
+                    }
+
+                }
+            ],
+            [
+                'attribute' => 'order_at',
+                'label' => 'Ordered Time Count',
+                'format' => 'raw',
+                'value' => function ($model) {
+
+                    $date1=date_create($model->order_at);
+                    $date2=date_create(date('Y-m-d H:i:s'));
+
+
+                    $dteDiff  = $date1->diff($date2);
+
+                    return $dteDiff->format("%H:%I:%S");
+
+                }
+            ],
+
             //'status',
 
             ['class' => 'yii\grid\ActionColumn',
 
-                'template' => '{accept} {reject}',
+                'template' => '{accept} {done} {reject}',
 
                 'buttons' => [
 
                     'accept' => function ($url, $model) {
 
-                        if ($model->status != 2) {
-                            return '<a class="btn btn-success btn-sm" href="' . \yii\helpers\Url::to(['order/update-status/', 'id' => $model->id, 'status' => \app\models\Order::ACCEPTED]) . '">Accept</button>';
+                        if (Yii::$app->user->can('admin')) {
+                            if ($model->status == 1) {
+                                return '<a class="btn btn-success btn-sm" href="' . \yii\helpers\Url::to(['order/update-status/', 'id' => $model->id, 'status' => \app\models\Order::ACCEPTED]) . '">Accept</button>';
+
+                            }
 
                         }
 
@@ -81,9 +112,22 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'reject' => function ($url, $model) {
 
-                        if ($model->status != 3) {
-                            return '<a class="btn btn-warning btn-sm" href="' . \yii\helpers\Url::to(['order/update-status/', 'id' => $model->id, 'status' => \app\models\Order::REJECTED]) . '">Reject</button>';
+                        if (Yii::$app->user->can('admin')) {
+                            if ($model->status == 1) {
+                                return '<a class="btn btn-warning btn-sm" href="' . \yii\helpers\Url::to(['order/update-status/', 'id' => $model->id, 'status' => \app\models\Order::REJECTED]) . '">Reject</button>';
 
+                            }
+                        }
+
+
+                    },
+                    'done' => function ($url, $model) {
+
+                        if (Yii::$app->user->can('admin')) {
+                            if ($model->status == 2) {
+                                return '<a class="btn btn-primary btn-sm" href="' . \yii\helpers\Url::to(['order/update-status/', 'id' => $model->id, 'status' => \app\models\Order::DONE]) . '">Done</button>';
+
+                            }
                         }
 
 

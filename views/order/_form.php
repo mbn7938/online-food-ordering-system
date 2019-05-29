@@ -14,12 +14,13 @@ use yii\widgets\Pjax;
 <div class="order-form">
 
     <?php if (Yii::$app->session->hasFlash('success')): ?>
-            <?= Yii::$app->session->getFlash('success') ?>
+        <?= Yii::$app->session->getFlash('success') ?>
 
     <?php endif; ?>
 
     <?php $form = ActiveForm::begin(['id' => 'order-form']); ?>
 
+    <?= $form->field($guest, 'name')->textInput() ?>
 
     <?= $form->field($guest, 'email')->textInput() ?>
 
@@ -33,9 +34,37 @@ use yii\widgets\Pjax;
         )
     ?>
 
+    <?php
+
+    $getAvailableTable = \app\models\Order::find()
+        //->select('group_concat(table_no,char(8)) as table_no')
+        ->where(['type' => 2])->asArray()
+        ->andWhere(['in', 'status', [1, 2]])
+        ->asArray()->all();
+
+    //$int = (int)$getAvailableTable['table_no'];
+
+
+    $array = [];
+    foreach ($getAvailableTable as $key => $val) {
+        $array[$key] = $val['table_no'];
+    }
+
+//    echo '<pre>';
+//    var_dump($array);
+//    echo '<pre>';
+//    die();
+
+    $arrayMap = \app\models\TableNo::find()
+        ->where(['not in', 'table_no', $array])
+        ->all();
+
+
+    ?>
+
     <?=
     $form->field($model, 'table_no')->dropDownList(
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        ArrayHelper::map($arrayMap, 'id', 'table_no')
     )
     ?>
 

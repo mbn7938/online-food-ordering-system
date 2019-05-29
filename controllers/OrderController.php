@@ -97,6 +97,7 @@ class OrderController extends Controller
         $guest = new Guest();
 
 
+
         if (!Yii::$app->user->isGuest) {
 
             $user = Yii::$app->user->identity;
@@ -123,6 +124,7 @@ class OrderController extends Controller
                     if(!$guest)
                     {
                         $newGuest = new Guest();
+                        $newGuest->name = $post['name'];
                         $newGuest->email = $post['email'];
                         $newGuest->tel_no = $post['tel_no'];
 
@@ -134,9 +136,14 @@ class OrderController extends Controller
                 {
                     $newGuest = new Guest();
                     $newGuest->email = $post['email'];
+                    $newGuest->name = $post['name'];
                     $newGuest->tel_no = $post['tel_no'];
 
-                    $newGuest->save();
+
+                    if(!$newGuest->save())
+                    {
+                        var_dump($newGuest->getErrors());
+                    }
                     $user = User::find()->where(['email' => $post['email']])->one();
 
                     if (!$user) {
@@ -166,7 +173,14 @@ class OrderController extends Controller
             $order->guest_id = (isset($newGuest)?$newGuest->id:$guest->id);
             $order->type = $post['type'];
             $order->status = Order::ORDERED;
-            $order->table_no = (isset($post['tableno']) ? $post['tableno'] : null);
+
+
+            if($post['type'] != 1)
+            {
+                $order->table_no = (isset($post['tableno']) ? $post['tableno'] : null);
+            }
+
+
             $order->order_at = date('Y-m-d H:i:s');
 
             if ($order->save()) {

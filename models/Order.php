@@ -21,6 +21,7 @@ class Order extends \yii\db\ActiveRecord
     const ORDERED = 1;
     const ACCEPTED = 2;
     const REJECTED = 3;
+    const DONE = 4;
     /**
      * {@inheritdoc}
      */

@@ -33,6 +33,8 @@ $(document).ready(function () {
 
         var tel_no = $('#guest-tel_no').val()
 
+        var name = $('#guest-name').val()
+
 
         var tableno = $('#order-table_no').val()
 
@@ -60,7 +62,8 @@ $(document).ready(function () {
                 'email': email,
                 'tel_no': tel_no,
                 'tableno': tableno,
-                'type': type
+                'type': type,
+                'name':name
             },
 
             success: function (data) {

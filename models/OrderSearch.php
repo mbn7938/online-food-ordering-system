@@ -46,6 +46,7 @@ class OrderSearch extends Order
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['order_at'=>SORT_DESC]]
         ]);
 
         $this->load($params);
@@ -90,6 +91,7 @@ class OrderSearch extends Order
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['order_at'=>SORT_DESC]]
         ]);
 
         $this->load($params);
