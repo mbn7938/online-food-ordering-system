@@ -63,12 +63,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => function ($model) {
 
-                    if ($model->table_no == 1) {
+                    if ($model->type == 2) {
                         return '<span class="badge badge-info">'.$model->table_no.'</span>';
                     }
                     else
                     {
-                        return '<span class="badge badge-info">TAKE <AWAY></AWAY></span>';
+                        return '<span class="badge badge-info">TAKE AWAY</span>';
                     }
 
                 }
