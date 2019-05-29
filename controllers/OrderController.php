@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Guest;
 use app\models\MenuFoodSearch;
 use app\models\OrderDetails;
+use app\models\OrderDetailsSearch;
 use app\models\Payment;
 use app\modules\user\models\User;
 use Yii;
@@ -78,10 +79,28 @@ class OrderController extends Controller
      */
     public function actionView($id)
     {
-        $orderDetails = OrderDetails::find()->where(['order_id' => $id])->one();
+        $orderDetails = OrderDetails::find()->where(['order_id' => $id])->all();
 
         return $this->render('view', [
             'orderDetails' => $orderDetails,
+        ]);
+    }
+
+    /**
+     * Displays a single Order model.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionViewDetails($id)
+    {
+        $searchModel = new OrderDetailsSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$id);
+
+
+        return $this->render('index-details', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 

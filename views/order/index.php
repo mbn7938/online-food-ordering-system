@@ -35,6 +35,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
+                'attribute' => 'guest_id',
+                'label' => 'Mobile No.',
+                'value' => function ($model) {
+                    return (isset($model->guest->tel_no) ? $model->guest->tel_no : '');
+                }
+            ],
+            [
                 'attribute' => 'type',
                 'label' => 'Order Type',
                 'value' => function ($model) {
@@ -96,6 +103,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 }
             ],
+            [
+                'attribute' => 'order_at',
+                'label' => 'View Details',
+                'format' => 'raw',
+                'value' => function ($model) {
+
+                    return '<a class="btn btn-primary btn-sm" href="' . \yii\helpers\Url::to(['order/view-details/', 'id' => $model->id]) . '">View Details</button>';
+
+
+                }
+            ],
+
 
             //'status',
 
