@@ -51,8 +51,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         return '<span class="badge badge-info">PENDING</span>';
                     } elseif ($model->status == 2) {
                         return '<span class="badge badge-primary">COOKING</span>';
-                    } else {
+                    }
+                    elseif ($model->status == 4) {
+                        return '<span class="badge badge-primary">DONE</span>';
+                    }
+                    elseif ($model->status == 3) {
                         return '<span class="badge badge-primary">REJECTED</span>';
+                    }
+                    else {
+                        return '<span class="badge badge-primary">PLEASE CALL WAITER</span>';
                     }
 
                 }
@@ -119,6 +126,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             }
                         }
 
+                        if ($model->status == 3) {
+                            return '<a class="btn btn-danger btn-sm" href="">REJECTED</button>';
+
+                        }
+
 
                     },
                     'done' => function ($url, $model) {
@@ -128,6 +140,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return '<a class="btn btn-primary btn-sm" href="' . \yii\helpers\Url::to(['order/update-status/', 'id' => $model->id, 'status' => \app\models\Order::DONE]) . '">Done</button>';
 
                             }
+                        }
+
+                        if ($model->status == 4) {
+                            return '<a class="btn btn-primary btn-sm" href="">FOOD READY</button>';
+
                         }
 
 
